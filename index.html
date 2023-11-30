@@ -5,9 +5,12 @@
 </head>
 <body>
   <div id="demo"></div>
+  <script src="https://unpkg.com/fflate@0.8.0"></script>
   <script src="asciinema-player.min.js"></script>
   <script>
-    AsciinemaPlayer.create('aoc-18-17.cast', document.getElementById('demo'));
+    const compressed = new Uint8Array(await fetch('aoc-18-17.cast.gz').then(res => res.arrayBuffer()));
+    const decompressed = fflate.decompressSync(compressed);
+    AsciinemaPlayer.create({data: decompressed}, document.getElementById('demo'));
   </script>
 </body>
 </html>
