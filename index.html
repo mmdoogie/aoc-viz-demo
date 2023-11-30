@@ -8,9 +8,14 @@
   <script src="https://unpkg.com/fflate@0.8.0"></script>
   <script src="asciinema-player.min.js"></script>
   <script>
-    const compressed = new Uint8Array(await fetch('aoc-18-17.cast.gz').then(res => res.arrayBuffer()));
-    const decompressed = fflate.decompressSync(compressed);
-    AsciinemaPlayer.create({data: decompressed}, document.getElementById('demo'));
+    (async function() {
+      const compressed = new Uint8Array(await fetch('aoc-18-17.cast.gz').then(res => res.arrayBuffer()));
+      const decompressed = fflate.decompressSync(compressed);
+      const decompstr = new TextDecoder().decode(decompressed);
+      compressed = null;
+      decompressed = null;
+      AsciinemaPlayer.create({data: decompstr}, document.getElementById('demo'));
+    })()
   </script>
 </body>
 </html>
