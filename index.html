@@ -4,16 +4,22 @@
   <link rel="stylesheet" type="text/css" href="asciinema-player.css" />
 </head>
 <body>
-  <div id="demo"></div>
   <script src="https://unpkg.com/fflate@0.8.0"></script>
   <script src="asciinema-player.min.js"></script>
   <script>
-    (async function() {
-      const compressed = new Uint8Array(await fetch('aoc-18-17.cast.gz').then(res => res.arrayBuffer()));
+    var currplayer = null;
+    async function play(selectbox) {
+      const compressed = new Uint8Array(await fetch(selectbox.value).then(res => res.arrayBuffer()));
       const decompressed = fflate.decompressSync(compressed);
       const decompstr = new TextDecoder().decode(decompressed);
-      AsciinemaPlayer.create({data: decompstr}, document.getElementById('demo'));
-    })()
+      if (currplayer) currplayer.dispose()
+      currplayer = AsciinemaPlayer.create({data: decompstr}, document.getElementById('demo'));
+    }
   </script>
+  <select onchange="play(this)">
+    <option value="aoc-23-01.cast.gz">2023 Day 1</option>
+    <option value="aoc-18-17.cast.gz">2018 Day 17</option>
+  </select>
+  <div id="demo"></div>
 </body>
 </html>
