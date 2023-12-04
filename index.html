@@ -8,7 +8,8 @@
   <script src="asciinema-player.min.js"></script>
   <script>
     var currplayer = null;
-    async function play(selectbox) {
+    async function play() {
+      const selectbox = document.getElementById('selectbox');
       const compressed = new Uint8Array(await fetch(selectbox.value).then(res => res.arrayBuffer()));
       const decompressed = fflate.decompressSync(compressed);
       const decompstr = new TextDecoder().decode(decompressed);
@@ -16,12 +17,12 @@
       currplayer = AsciinemaPlayer.create({data: decompstr}, document.getElementById('demo'));
     }
   </script>
-  <select onchange="play(this)">
-    <option hidden selected>Pick a day...</option>
+  Pick a day: <select id="selectbox">
     <option value="aoc-23-01.cast.gz">2023 Day 1</option>
     <option value="aoc-23-02.cast.gz">2023 Day 2</option>
+    <option selected value="aoc-23-04.cast.gz">2023 Day 4</option>
     <option value="aoc-18-17.cast.gz">2018 Day 17</option>
-  </select>
+  </select><button onclick="play()">Load</button>
   <div id="demo"></div>
 </body>
 </html>
